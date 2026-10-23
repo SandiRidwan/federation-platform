@@ -91,7 +91,7 @@ make verify PYTHON=.venv/bin/python       # 21 steps → RESULT: PASS
             └────────────┬─────────────────┘
                          ▼
               ┌─────────────────────┐
-              │ federation.parity   │  5 cases · 3 runs · 3 engines
+              │ federation.parity   │  5 cases · 5 runs · 3 engines
               └──────────┬──────────┘
                          ▼
               ┌─────────────────────┐
@@ -111,19 +111,24 @@ Every figure below is a field in `quality/reports/`. Nothing here is estimated.
 
 ### One query, three engines
 
-`federation_parity.json` — 5 cases, 3 runs each, every value compared with the **generator**, not
+`federation_parity.json` — 5 cases, 5 runs each, every value compared with the **generator**, not
 with another engine.
 
 | Case | Trino p50 | Druid p50 | Winner |
 |---|---:|---:|---|
-| `row_count_sales` | 208.7 ms | 88.4 ms | Druid 2.36× |
-| `revenue_by_category` | 367.0 ms | 119.0 ms | Druid 3.08× |
-| `inventory_by_category` | 248.2 ms | 106.3 ms | Druid 2.34× |
-| `join_sales_products` | 510.2 ms | 306.1 ms | Druid 1.67× |
+| `row_count_sales` | 82.3 ms | 52.7 ms | Druid 1.56× |
+| `row_count_products` | 89.3 ms | 30.7 ms | Druid 2.91× |
+| `revenue_by_category` | 122.1 ms | 55.3 ms | Druid 2.21× |
+| `inventory_by_category` | 133.1 ms | 46.0 ms | Druid 2.89× |
+| `join_sales_products` | **198.9 ms** | 327.0 ms | **Trino 1.64×** |
 
-**Druid won every case — including the join, which was included expecting the opposite.** That is
-fixed overhead on Trino's side (query planning + Iceberg metadata), not evidence that Druid is
-universally faster. The report keeps the finding instead of deleting the case.
+That split is the point of running two engines: **Druid wins every aggregation, Trino wins the
+join.** Druid's column store answers "sum by category" without touching a row it does not need;
+Trino's join is better at combining two tables.
+
+The margin is small enough that the **run count matters**, and the report says so: an earlier
+3-run pass had Druid winning the join as well (306 ms vs 510 ms). A single pass on a laptop is not
+a benchmark — which is why `runs_per_query` is a field, not a footnote.
 
 Presto is a **dialect**, checked with `sqlglot` and executed on Trino. The report says
 `compiled, executed on trino` — never "Presto ran".
@@ -178,7 +183,7 @@ hide behind a plausible-looking number:
 
 | Target | Result |
 |---|---|
-| ADLS Blob API (Azurite) | 31 files, 984,382 bytes, ~1.5 MB/s, readback **byte-identical** |
+| ADLS Blob API (Azurite) | 31 files, 984,382 bytes, ~2.5 MB/s, readback **byte-identical** |
 | Data Factory | 5 activities validated + executed by a local runner |
 | Synapse SQL | every model transpiles and matches the generator |
 | TMDL / DAX | every measure translated to SQL and matched against an independent query |
@@ -196,6 +201,7 @@ hide behind a plausible-looking number:
 | Cross-layer question | electronics holds the most inventory (**1,038,903,990** cents), books earned the most revenue (**244,536,649** cents) |
 | Citation check | the quoted document actually contains the fact — `cited_contains_fact: true` |
 | `make verify` | **21 steps, 15 reports, RESULT: PASS** |
+| Parity, 5 runs | 5/5 identical across **three** engines; Druid wins 4 aggregations, Trino wins the join |
 
 ---
 
@@ -208,7 +214,7 @@ hide behind a plausible-looking number:
 | `federation/trino/` | Hive + Iceberg catalogs, statement API with the `nextUri` chain | executed |
 | `federation/druid/` | `index_parallel` batch ingestion, SQL over HTTP, server-side timing | executed |
 | `federation/presto/` | Dialect validation and transpile with `sqlglot` | compiled |
-| `federation/parity.py` | 5 cases × 3 runs × 3 engines, checked against the generator | executed |
+| `federation/parity.py` | 5 cases × 5 runs × 3 engines, checked against the generator | executed |
 | `azure_layer/storage/` | ADLS Gen2 Blob half via Azurite, throughput, byte-compare | executed |
 | `azure_layer/adf/` | Pipeline JSON + schema validator + local runner (copy → lookup → filter → for-each) | executed (local), compiled (ADF) |
 | `azure_layer/synapse/` | T-SQL transpile, executed on DuckDB | compiled |
@@ -300,6 +306,14 @@ using the wrong section header (`[tool:pytest]`), so it collected `data/`. Colle
 `local_equivalent` shelled out to a bare `ruff` and `pytest` from `PATH`, which resolved to another
 project's interpreter — the report was measuring a different environment. It now runs
 `sys.executable -m ...`, and the step passes for the right reason.
+
+### Challenge 13 — A parity case that quietly skipped an engine
+
+`row_count_products` had `"druid": None`, left over from before the products datasource existed.
+The report still said `engines: [trino, druid, presto_dialect]` and the headline said "three
+engines", while that one case was measured on two. Nobody would have caught it from the PASS. The
+Druid query was added, the case now runs on all three, and — the useful part — **Trino wins the
+join**, which the earlier 4-case view could not show.
 
 ---
 

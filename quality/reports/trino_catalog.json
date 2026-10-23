@@ -5,22 +5,22 @@
     {
       "sql": "CREATE SCHEMA IF NOT EXISTS hive.lakehouse WITH",
       "ok": true,
-      "elapsed_ms": 112.49
+      "elapsed_ms": 84.51
     },
     {
       "sql": "CREATE TABLE IF NOT EXISTS hive.lakehouse.products",
       "ok": true,
-      "elapsed_ms": 52.64
+      "elapsed_ms": 80.1
     },
     {
       "sql": "CREATE TABLE IF NOT EXISTS hive.lakehouse.sales",
       "ok": true,
-      "elapsed_ms": 64.15
+      "elapsed_ms": 60.68
     },
     {
       "sql": "CALL hive.system.sync_partition_metadata",
       "ok": true,
-      "elapsed_ms": 451.8
+      "elapsed_ms": 310.93
     }
   ],
   "row_counts": {

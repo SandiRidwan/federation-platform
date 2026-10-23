@@ -50,7 +50,10 @@ CASES = [
         "id": "row_count_products",
         "question": "how many products are there",
         "trino": "SELECT count(*) AS n FROM iceberg.lakehouse.products",
-        "druid": None,
+        # Not `None`: the products datasource exists in Druid (5,000 rows), so the third engine can
+        # answer this too. Leaving it out made "three engines, one number" true for four cases and
+        # only two engines for the fifth — a claim the report would have been quietly overstating.
+        "druid": 'SELECT COUNT(*) AS "n" FROM "products"',
         "presto": "SELECT count(*) AS n FROM iceberg.lakehouse.products",
         "expect_key": "products",
     },
@@ -243,9 +246,11 @@ def main(argv: list[str] | None = None) -> int:
             "Expected values come from the generator, not from any engine being compared.",
             "Druid ingestion has rollup disabled, because rollup's default collapses rows and made "
             "COUNT(*) a different number from the other engines.",
-            "At 60,000 rows Druid was faster on every case, including the join. That is fixed "
-            "overhead on Trino's side (query planning + Iceberg metadata), not evidence that Druid "
-            "is universally faster; the join case was included expecting the opposite result.",
+            "At 60,000 rows Druid wins the aggregations and Trino wins the join, which is the split "
+            "the engines are designed for — but the margin is small enough that the run count "
+            "matters. An earlier 3-run pass had Druid winning the join as well (306 ms against "
+            "510 ms), which is why `runs_per_query` is in this report and why the default is 5. A "
+            "single pass on a laptop is not a benchmark.",
         ],
     }
 

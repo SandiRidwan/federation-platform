@@ -1,4 +1,4 @@
-"""One command that runs every component and fails if any of them did not pass.
+﻿"""One command that runs every component and fails if any of them did not pass.
 
 `make verify` is this file. It exists because a repository of eleven green reports proves nothing
 if nobody runs all eleven: the interesting failures are the ones that only appear when the pipeline
@@ -47,7 +47,7 @@ STEPS: tuple[Step, ...] = (
     Step("iceberg-load", "ingestion.iceberg_load", needs_docker=True),
     Step("trino-catalog", "federation.trino.catalog", ("--register",), needs_docker=True),
     Step("druid-load", "federation.druid.ingest", ("--load",), needs_docker=True),
-    Step("federation-parity", "federation.parity", ("--runs", "3"), needs_docker=True),
+    Step("federation-parity", "federation.parity", ("--runs", "5"), needs_docker=True),
     Step("azure-storage", "azure_layer.storage.adls", needs_docker=True),
     Step("azure-adf", "azure_layer.adf.runner"),
     Step("azure-synapse", "azure_layer.synapse.transpile"),
@@ -159,3 +159,4 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

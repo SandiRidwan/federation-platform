@@ -1,11 +1,11 @@
 {
-  "ran_at": "2026-10-23T13:19:46.604663+00:00",
+  "ran_at": "2026-10-23T14:40:45.579477+00:00",
   "engines": [
     "trino",
     "druid",
     "presto_dialect"
   ],
-  "runs_per_query": 3,
+  "runs_per_query": 5,
   "cases": [
     {
       "id": "row_count_sales",
@@ -28,16 +28,16 @@
       },
       "timings": {
         "trino": {
-          "p50_ms": 208.65,
-          "cold_ms": 391.39
+          "p50_ms": 82.31,
+          "cold_ms": 199.21
         },
         "presto_dialect": {
           "transpile_ok": true,
           "status": "compiled, executed on trino"
         },
         "druid": {
-          "p50_ms": 88.43,
-          "cold_ms": 114.65
+          "p50_ms": 52.74,
+          "cold_ms": 52.59
         }
       },
       "errors": {},
@@ -48,26 +48,32 @@
       "question": "how many products are there",
       "sql": {
         "trino": "SELECT count(*) AS n FROM iceberg.lakehouse.products",
-        "druid": null,
+        "druid": "SELECT COUNT(*) AS \"n\" FROM \"products\"",
         "presto": "SELECT count(*) AS n FROM iceberg.lakehouse.products"
       },
       "expected": 5000,
       "values": {
         "trino": 5000,
-        "presto_dialect": 5000
+        "presto_dialect": 5000,
+        "druid": 5000
       },
       "matches_expected": {
         "trino": true,
-        "presto_dialect": true
+        "presto_dialect": true,
+        "druid": true
       },
       "timings": {
         "trino": {
-          "p50_ms": 280.81,
-          "cold_ms": 363.3
+          "p50_ms": 89.3,
+          "cold_ms": 119.07
         },
         "presto_dialect": {
           "transpile_ok": true,
           "status": "compiled, executed on trino"
+        },
+        "druid": {
+          "p50_ms": 30.67,
+          "cold_ms": 27.1
         }
       },
       "errors": {},
@@ -122,16 +128,16 @@
       },
       "timings": {
         "trino": {
-          "p50_ms": 366.99,
-          "cold_ms": 1332.86
+          "p50_ms": 122.08,
+          "cold_ms": 181.77
         },
         "presto_dialect": {
           "transpile_ok": true,
           "status": "compiled, executed on trino"
         },
         "druid": {
-          "p50_ms": 119.0,
-          "cold_ms": 183.07
+          "p50_ms": 55.3,
+          "cold_ms": 129.29
         }
       },
       "errors": {},
@@ -186,16 +192,16 @@
       },
       "timings": {
         "trino": {
-          "p50_ms": 248.18,
-          "cold_ms": 265.64
+          "p50_ms": 133.1,
+          "cold_ms": 131.13
         },
         "presto_dialect": {
           "transpile_ok": true,
           "status": "compiled, executed on trino"
         },
         "druid": {
-          "p50_ms": 106.26,
-          "cold_ms": 119.96
+          "p50_ms": 45.99,
+          "cold_ms": 66.48
         }
       },
       "errors": {},
@@ -246,16 +252,16 @@
       },
       "timings": {
         "trino": {
-          "p50_ms": 510.18,
-          "cold_ms": 493.49
+          "p50_ms": 198.87,
+          "cold_ms": 233.12
         },
         "presto_dialect": {
           "transpile_ok": true,
           "status": "compiled, executed on trino"
         },
         "druid": {
-          "p50_ms": 306.14,
-          "cold_ms": 501.27
+          "p50_ms": 327.02,
+          "cold_ms": 363.32
         }
       },
       "errors": {},
@@ -264,28 +270,34 @@
   ],
   "speedups": {
     "row_count_sales": {
-      "trino_p50_ms": 208.65,
-      "druid_p50_ms": 88.43,
-      "trino_over_druid": 2.36,
+      "trino_p50_ms": 82.31,
+      "druid_p50_ms": 52.74,
+      "trino_over_druid": 1.56,
+      "druid_wins": true
+    },
+    "row_count_products": {
+      "trino_p50_ms": 89.3,
+      "druid_p50_ms": 30.67,
+      "trino_over_druid": 2.91,
       "druid_wins": true
     },
     "revenue_by_category": {
-      "trino_p50_ms": 366.99,
-      "druid_p50_ms": 119.0,
-      "trino_over_druid": 3.08,
+      "trino_p50_ms": 122.08,
+      "druid_p50_ms": 55.3,
+      "trino_over_druid": 2.21,
       "druid_wins": true
     },
     "inventory_by_category": {
-      "trino_p50_ms": 248.18,
-      "druid_p50_ms": 106.26,
-      "trino_over_druid": 2.34,
+      "trino_p50_ms": 133.1,
+      "druid_p50_ms": 45.99,
+      "trino_over_druid": 2.89,
       "druid_wins": true
     },
     "join_sales_products": {
-      "trino_p50_ms": 510.18,
-      "druid_p50_ms": 306.14,
-      "trino_over_druid": 1.67,
-      "druid_wins": true
+      "trino_p50_ms": 198.87,
+      "druid_p50_ms": 327.02,
+      "trino_over_druid": 0.61,
+      "druid_wins": false
     }
   },
   "checks": {
@@ -298,6 +310,6 @@
     "Presto is a dialect here, executed on Trino. The report says 'compiled, executed on trino', never 'Presto ran'.",
     "Expected values come from the generator, not from any engine being compared.",
     "Druid ingestion has rollup disabled, because rollup's default collapses rows and made COUNT(*) a different number from the other engines.",
-    "At 60,000 rows Druid was faster on every case, including the join. That is fixed overhead on Trino's side (query planning + Iceberg metadata), not evidence that Druid is universally faster; the join case was included expecting the opposite result."
+    "At 60,000 rows Druid wins the aggregations and Trino wins the join, which is the split the engines are designed for \u2014 but the margin is small enough that the run count matters. An earlier 3-run pass had Druid winning the join as well (306 ms against 510 ms), which is why `runs_per_query` is in this report and why the default is 5. A single pass on a laptop is not a benchmark."
   ]
 }

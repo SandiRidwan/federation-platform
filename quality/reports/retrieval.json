@@ -24,7 +24,7 @@
   },
   "results": {
     "fixed": {
-      "build_ms": 360.3,
+      "build_ms": 141.3,
       "methods": {
         "bm25": {
           "recall_at_1": 0.625,
@@ -42,7 +42,7 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 0.853
+          "p50_ms_per_query": 0.415
         },
         "vector": {
           "recall_at_1": 0.5,
@@ -60,7 +60,7 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 4.122
+          "p50_ms_per_query": 1.925
         },
         "vector_ivf": {
           "recall_at_1": 0.5,
@@ -78,7 +78,7 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 4.116
+          "p50_ms_per_query": 1.928
         },
         "hybrid": {
           "recall_at_1": 0.625,
@@ -96,12 +96,12 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 5.744
+          "p50_ms_per_query": 2.855
         }
       }
     },
     "recursive": {
-      "build_ms": 327.5,
+      "build_ms": 126.9,
       "methods": {
         "bm25": {
           "recall_at_1": 0.625,
@@ -119,7 +119,7 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 0.603
+          "p50_ms_per_query": 0.439
         },
         "vector": {
           "recall_at_1": 0.625,
@@ -137,7 +137,7 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 2.29
+          "p50_ms_per_query": 1.118
         },
         "vector_ivf": {
           "recall_at_1": 0.625,
@@ -155,7 +155,7 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 2.563
+          "p50_ms_per_query": 1.131
         },
         "hybrid": {
           "recall_at_1": 0.625,
@@ -173,12 +173,12 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 3.238
+          "p50_ms_per_query": 3.075
         }
       }
     },
     "semantic": {
-      "build_ms": 1475.1,
+      "build_ms": 950.3,
       "methods": {
         "bm25": {
           "recall_at_1": 0.0,
@@ -196,7 +196,7 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 1.77
+          "p50_ms_per_query": 1.393
         },
         "vector": {
           "recall_at_1": 0.0,
@@ -214,7 +214,7 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 3.781
+          "p50_ms_per_query": 1.629
         },
         "vector_ivf": {
           "recall_at_1": 0.0042,
@@ -232,7 +232,7 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 4.533
+          "p50_ms_per_query": 2.119
         },
         "hybrid": {
           "recall_at_1": 0.0,
@@ -250,7 +250,7 @@
               "of": 120
             }
           },
-          "p50_ms_per_query": 5.768
+          "p50_ms_per_query": 4.99
         }
       }
     }

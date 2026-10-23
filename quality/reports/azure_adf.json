@@ -78,7 +78,7 @@
     "FilterBooks",
     "LookupCategories"
   ],
-  "ran_at": "2026-10-23T13:19:59.573271+00:00",
+  "ran_at": "2026-10-23T14:40:53.872298+00:00",
   "status": "compiled for ADF, executed by the local runner",
   "checks": {
     "pipeline_validates": true,

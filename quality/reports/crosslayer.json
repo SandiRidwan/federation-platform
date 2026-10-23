@@ -1,5 +1,5 @@
 {
-  "ran_at": "2026-10-23T13:21:14.095264+00:00",
+  "ran_at": "2026-10-23T14:41:35.857208+00:00",
   "question": "Which category holds the most inventory value, and which earned the most revenue?",
   "layers": {
     "trino_iceberg_over_s3": {
@@ -25,7 +25,7 @@
       }
     },
     "azurite": {
-      "blob": "crosslayer/joined-20261023T132114.json",
+      "blob": "crosslayer/joined-20261023T144135.json",
       "bytes": 515,
       "readback_matches": true
     },

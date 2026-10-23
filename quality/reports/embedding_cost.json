@@ -10,13 +10,13 @@
   },
   "measured": {
     "words_embedded": 6280,
-    "seconds": 0.0208,
-    "words_per_second": 301225,
-    "seconds_per_million_words": 3.32,
-    "kwh_per_million_words": 6e-05,
-    "local_usd_per_million_words": 9e-06,
+    "seconds": 0.0108,
+    "words_per_second": 582538,
+    "seconds_per_million_words": 1.72,
+    "kwh_per_million_words": 3.1e-05,
+    "local_usd_per_million_words": 5e-06,
     "api_usd_per_million_words": 0.02,
-    "ratio_api_over_local": 2224.43
+    "ratio_api_over_local": 4301.82
   },
   "checks": {
     "corpus_measured": true,
