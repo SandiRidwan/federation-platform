@@ -1,0 +1,71 @@
+{
+  "ran_at": "2026-10-23T13:21:14.095264+00:00",
+  "question": "Which category holds the most inventory value, and which earned the most revenue?",
+  "layers": {
+    "trino_iceberg_over_s3": {
+      "rows": 6,
+      "values": {
+        "electronics": 1038903990,
+        "garden": 1038535158,
+        "kitchen": 1034061586,
+        "books": 1031043084,
+        "toys": 1029096924,
+        "office": 1026611758
+      }
+    },
+    "druid": {
+      "rows": 6,
+      "values": {
+        "books": 244536649,
+        "garden": 244197837,
+        "office": 243574680,
+        "toys": 243104992,
+        "kitchen": 242944090,
+        "electronics": 239694108
+      }
+    },
+    "azurite": {
+      "blob": "crosslayer/joined-20261023T132114.json",
+      "bytes": 515,
+      "readback_matches": true
+    },
+    "retrieval": {
+      "question": "Which warehouse holds X-1001?",
+      "expected_fact": "WH-7",
+      "hits": [
+        {
+          "doc_id": "doc-001",
+          "contains_fact": true,
+          "quote": "Product X-1001 is a electronics item supplied by acme. It is held in warehouse WH-7 at a unit price of 512 cents. The it"
+        },
+        {
+          "doc_id": "doc-006",
+          "contains_fact": true,
+          "quote": "Product X-1006 is a books item supplied by acme. It is held in warehouse WH-7 at a unit price of 577 cents. The item has"
+        },
+        {
+          "doc_id": "doc-041",
+          "contains_fact": true,
+          "quote": "Product X-1041 is a toys item supplied by acme. It is held in warehouse WH-7 at a unit price of 1032 cents. The item has"
+        }
+      ],
+      "cited_contains_fact": true
+    }
+  },
+  "headline": {
+    "top_inventory_category": "electronics",
+    "top_inventory_cents": 1038903990,
+    "top_revenue_category": "books",
+    "top_revenue_cents": 244536649
+  },
+  "checks": {
+    "trino_matches_generator": true,
+    "druid_matches_generator": true,
+    "parked_blob_reads_back_identically": true,
+    "top_inventory_category_agrees_with_trino": true,
+    "top_revenue_category_agrees_with_druid": true,
+    "citation_names_a_document_with_the_fact": true
+  },
+  "result": "PASS",
+  "note": "Four layers, one question. Each number is checked against the generator, the parked artifact is compared byte for byte, and the citation is only accepted if the retrieved document actually contains the fact."
+}

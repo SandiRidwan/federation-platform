@@ -1,0 +1,6 @@
+# Shell scripts, YAML, properties and Docker configs must keep LF: a CRLF in `infra/trino/etc`
+# is read by a Linux JVM, and a CRLF in azure-pipelines.yml is a YAML parsing surprise waiting to
+# happen. Everything else is normalised the same way so the repository has one line ending.
+* text=auto eol=lf
+*.png binary
+*.parquet binary

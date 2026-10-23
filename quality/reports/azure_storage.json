@@ -1,0 +1,20 @@
+{
+  "ran_at": "2026-10-23T13:19:57.890752+00:00",
+  "container": "lakehouse",
+  "blobs_removed_before_upload": 36,
+  "files_uploaded": 31,
+  "bytes_uploaded": 984382,
+  "upload_seconds": 0.65,
+  "upload_bytes_per_second": 1517442,
+  "readback_blob": "landing/products/part-00000.parquet",
+  "readback_matches_source": true,
+  "blobs_listed": 31,
+  "flat_namespace_note": "Blob API only. ADLS Gen2's hierarchical namespace (directory rename, ACL inheritance) is not exercised, because Azurite does not implement the DFS endpoint.",
+  "checks": {
+    "every_file_uploaded": true,
+    "readback_is_byte_identical": true,
+    "listing_matches_upload_count": true
+  },
+  "result": "PASS",
+  "endpoint": "http://127.0.0.1:10000/devstoreaccount1"
+}

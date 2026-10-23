@@ -1,0 +1,88 @@
+{
+  "pipeline": "pls_lakehouse_curate",
+  "validation": {
+    "valid": true,
+    "problems": [],
+    "activities": 5
+  },
+  "activities_run": 5,
+  "activity_results": [
+    {
+      "activity": "CopyProductsToCurated",
+      "type": "Copy",
+      "bytes": 35475,
+      "to": "curated/products/products.parquet"
+    },
+    {
+      "activity": "CopySalesManifestToCurated",
+      "type": "Copy",
+      "bytes": 31730,
+      "to": "curated/sales/one_day.parquet"
+    },
+    {
+      "activity": "LookupCategories",
+      "type": "Lookup",
+      "rows": 6
+    },
+    {
+      "activity": "FilterBooks",
+      "type": "Filter",
+      "kept": 1,
+      "of": 6
+    },
+    {
+      "activity": "ForEachCategory",
+      "type": "ForEach",
+      "iterations": 6,
+      "inner": [
+        {
+          "activity": "CopySalesForCategory",
+          "type": "Copy",
+          "bytes": 31666,
+          "to": "curated/by_category/part.parquet"
+        },
+        {
+          "activity": "CopySalesForCategory",
+          "type": "Copy",
+          "bytes": 31666,
+          "to": "curated/by_category/part.parquet"
+        },
+        {
+          "activity": "CopySalesForCategory",
+          "type": "Copy",
+          "bytes": 31666,
+          "to": "curated/by_category/part.parquet"
+        },
+        {
+          "activity": "CopySalesForCategory",
+          "type": "Copy",
+          "bytes": 31666,
+          "to": "curated/by_category/part.parquet"
+        },
+        {
+          "activity": "CopySalesForCategory",
+          "type": "Copy",
+          "bytes": 31666,
+          "to": "curated/by_category/part.parquet"
+        },
+        {
+          "activity": "CopySalesForCategory",
+          "type": "Copy",
+          "bytes": 31666,
+          "to": "curated/by_category/part.parquet"
+        }
+      ]
+    }
+  ],
+  "context_keys": [
+    "FilterBooks",
+    "LookupCategories"
+  ],
+  "ran_at": "2026-10-23T13:19:59.573271+00:00",
+  "status": "compiled for ADF, executed by the local runner",
+  "checks": {
+    "pipeline_validates": true,
+    "every_activity_ran": true
+  },
+  "result": "PASS"
+}

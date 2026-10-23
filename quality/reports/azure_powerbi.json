@@ -1,0 +1,30 @@
+{
+  "target": "power bi",
+  "status": "compiled, not executed (no Power BI Desktop in this environment)",
+  "files": [
+    "federation.Report/report.json",
+    "federation.SemanticModel/definition/model.tmdl",
+    "federation.pbip"
+  ],
+  "measures": [
+    "Total Revenue",
+    "Total Events",
+    "Avg Price",
+    "Inventory Value",
+    "Revenue per Event",
+    "Books Revenue",
+    "Revenue per Product",
+    "Max Inventory Product"
+  ],
+  "missing_measures": [],
+  "mismatched_measures": [],
+  "checks": {
+    "project_file_written": true,
+    "report_folder_written": true,
+    "tmdl_written": true,
+    "every_measure_present": true,
+    "every_measure_dax_verbatim": true
+  },
+  "result": "PASS",
+  "note": "The .pbip/TMDL artefact is generated from the same measure definitions that were translated to SQL and executed. Nothing opens Power BI, so no render is claimed."
+}

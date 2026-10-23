@@ -1,0 +1,38 @@
+{
+  "catalog": "hive.lakehouse",
+  "metastore": "file (hive.metastore=file); no metastore service is running",
+  "registered": [
+    {
+      "sql": "CREATE SCHEMA IF NOT EXISTS hive.lakehouse WITH",
+      "ok": true,
+      "elapsed_ms": 112.49
+    },
+    {
+      "sql": "CREATE TABLE IF NOT EXISTS hive.lakehouse.products",
+      "ok": true,
+      "elapsed_ms": 52.64
+    },
+    {
+      "sql": "CREATE TABLE IF NOT EXISTS hive.lakehouse.sales",
+      "ok": true,
+      "elapsed_ms": 64.15
+    },
+    {
+      "sql": "CALL hive.system.sync_partition_metadata",
+      "ok": true,
+      "elapsed_ms": 451.8
+    }
+  ],
+  "row_counts": {
+    "sales": 60000,
+    "products": 5000
+  },
+  "errors": {},
+  "checks": {
+    "schema_and_tables_created": true,
+    "sales_row_count_matches_generator": true,
+    "products_row_count_matches_generator": true
+  },
+  "result": "PASS",
+  "note": "The table format and partition layout are Hive's; the metastore is a directory on disk, not a Hive Metastore service. The row counts are compared with the generator, not with Trino's own answer from a second query."
+}

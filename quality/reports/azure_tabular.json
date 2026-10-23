@@ -1,0 +1,86 @@
+{
+  "target": "analysis services (tabular)",
+  "status": "compiled (TMDL) + executed (DAX translated to SQL on duckdb)",
+  "supported_dax": [
+    "SUM/AVERAGE/MIN/MAX(Table[col])",
+    "COUNTROWS(Table)",
+    "SUMX(Table, a * b)",
+    "DIVIDE(a, b)",
+    "CALCULATE([measure], Table[col] = \"literal\")",
+    "[measure] references"
+  ],
+  "measures": [
+    {
+      "measure": "Total Revenue",
+      "dax": "SUM(Sales[amount_cents])",
+      "sql": "(SELECT SUM(amount_cents) FROM sales)",
+      "value": 1458052356,
+      "check_value": 1458052356,
+      "matches_check": true
+    },
+    {
+      "measure": "Total Events",
+      "dax": "COUNTROWS(Sales)",
+      "sql": "(SELECT COUNT(*) FROM sales)",
+      "value": 60000,
+      "check_value": 60000,
+      "matches_check": true
+    },
+    {
+      "measure": "Avg Price",
+      "dax": "AVERAGE(Products[price_cents])",
+      "sql": "(SELECT AVG(price_cents) FROM products)",
+      "value": 9730.5,
+      "check_value": 9730.5,
+      "matches_check": true
+    },
+    {
+      "measure": "Inventory Value",
+      "dax": "SUMX(Products, Products[price_cents] * Products[stock_count])",
+      "sql": "(SELECT SUM(products.price_cents * products.stock_count) FROM products)",
+      "value": 6198252500,
+      "check_value": 6198252500,
+      "matches_check": true
+    },
+    {
+      "measure": "Revenue per Event",
+      "dax": "DIVIDE([Total Revenue], [Total Events])",
+      "sql": "((SELECT SUM(amount_cents) FROM sales) * 1.0 / (SELECT COUNT(*) FROM sales))",
+      "value": 24300.8726,
+      "check_value": 24300.8726,
+      "matches_check": true
+    },
+    {
+      "measure": "Books Revenue",
+      "dax": "CALCULATE([Total Revenue], Sales[category] = \"books\")",
+      "sql": "(SELECT SUM(amount_cents) FROM sales WHERE sales.category = 'books')",
+      "value": 244536649,
+      "check_value": 244536649,
+      "matches_check": true
+    },
+    {
+      "measure": "Revenue per Product",
+      "dax": "DIVIDE([Total Revenue], COUNTROWS(Products))",
+      "sql": "((SELECT SUM(amount_cents) FROM sales) * 1.0 / (SELECT COUNT(*) FROM products))",
+      "value": 291610.4712,
+      "check_value": 291610.4712,
+      "matches_check": true
+    },
+    {
+      "measure": "Max Inventory Product",
+      "dax": "MAX(Products[stock_count])",
+      "sql": "(SELECT MAX(stock_count) FROM products)",
+      "value": 249,
+      "check_value": 249,
+      "matches_check": true
+    }
+  ],
+  "errors": {},
+  "tmdl_file": "azure_layer\\tabular\\out\\model.tmdl",
+  "checks": {
+    "every_measure_translated": true,
+    "every_measure_matches_independent_sql": true,
+    "tmdl_written": true
+  },
+  "result": "PASS"
+}

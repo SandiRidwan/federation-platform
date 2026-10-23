@@ -1,0 +1,103 @@
+﻿services:
+  # Trino: a real distributed SQL engine, single-node. It reads the Parquet files the generator
+  # wrote, through the Hive connector with the filesystem metastore.
+  trino:
+    image: trinodb/trino:484   # pinned: 484 added fs.local.enabled and a floating `latest` silently broke the file metastore
+    container_name: federation-trino
+    ports:
+      # 8080 on the host is Airflow in the neighbouring stack; 8090 avoids a collision that
+      # would otherwise fail at container start with "port is already allocated".
+      - "8090:8080"
+    volumes:
+      - ./infra/trino/etc:/etc/trino:ro
+      - ./data:/data
+      # Trino 484 resolves local paths (the Hive file metastore) under the JVM temp directory, so
+      # the same data directory is mounted there as well. Without this the metastore lives in
+      # /tmp, which disappears with the container.
+      - ./data:/tmp/data
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx1536M
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8080/v1/info"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  # The Iceberg catalog. Postgres holds the table metadata; the data files live in the warehouse
+  # directory. Two independent engines read this same catalog: pyiceberg (Python, the writer) and
+  # Trino (Java, the reader). That is the whole point of a shared catalog.
+  postgres:
+    image: postgres:16-alpine
+    container_name: federation-postgres
+    environment:
+      POSTGRES_USER: federation
+      POSTGRES_PASSWORD: federation
+      POSTGRES_DB: iceberg
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U federation -d iceberg"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # Iceberg data files live in object storage, not on the local filesystem: Trino's Iceberg
+  # connector refuses the `file://` scheme, so a local warehouse is writable by Python and
+  # invisible to Trino. S3 is the smallest thing both engines speak.
+  #
+  # `adobe/s3mock` rather than MinIO: MinIO stopped publishing its images on Docker Hub (they moved
+  # to quay.io), and the pull failed here. s3mock is an S3 API mock that is already cached on this
+  # machine and speaks the same wire protocol for PUT/GET/LIST, which is all Iceberg needs.
+  s3:
+    image: adobe/s3mock:5.2.3
+    container_name: federation-s3
+    environment:
+      - COM_ADOBE_TESTING_S3MOCK_STORE_INITIAL_BUCKETS=federation
+      - COM_ADOBE_TESTING_S3MOCK_STORE_REGION=us-east-1
+    ports:
+      - "9092:9090"   # host 9090 belongs to the neighbouring project's S3 mock
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:9090/"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  # One-shot bucket creation is not a service: MinIO's client image is not guaranteed to pull on
+  # every registry mirror, and a bucket that has to be created by hand is a README step that will
+  # be skipped. `ingestion.iceberg_load` creates it through pyarrow's S3 filesystem instead, which
+  # is already a dependency.
+
+  # Druid, single JVM. `start-nano-quickstart` runs coordinator, overlord, broker, historical,
+  # middle-manager, router and an embedded ZooKeeper in one process — which is what makes a
+  # laptop-sized demonstration possible. It is NOT a production cluster, and the report says so.
+  druid:
+    image: apache/druid:38.0.0
+    container_name: federation-druid
+    # `start-nano-quickstart` calls `bin/supervise`, which is a Perl script and Perl is not in the
+    # image: it dies with "No error information". So the same five processes are started directly,
+    # from the same nano-quickstart config the supervise file names.
+    entrypoint:
+      - sh
+      - -c
+      - |
+        bin/run-zk conf > /tmp/zk.log 2>&1 &
+        bin/run-druid coordinator-overlord conf/druid/single-server/nano-quickstart > /tmp/co.log 2>&1 &
+        bin/run-druid broker conf/druid/single-server/nano-quickstart > /tmp/br.log 2>&1 &
+        bin/run-druid router conf/druid/single-server/nano-quickstart > /tmp/rt.log 2>&1 &
+        bin/run-druid historical conf/druid/single-server/nano-quickstart > /tmp/hi.log 2>&1 &
+        bin/run-druid middleManager conf/druid/single-server/nano-quickstart > /tmp/mm.log 2>&1 &
+        wait
+    ports:
+      - "8888:8888"   # router
+      - "8082:8082"   # broker
+      - "8081:8081"   # coordinator / overlord
+    volumes:
+      - ./data/druid-ingest:/data/druid-ingest:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8082/status || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+
+
+

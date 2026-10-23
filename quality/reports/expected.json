@@ -1,0 +1,88 @@
+{
+  "seed": 20261023,
+  "products": 5000,
+  "sales": 60000,
+  "days": 30,
+  "days_list": [
+    "2026-09-24",
+    "2026-09-25",
+    "2026-09-26",
+    "2026-09-27",
+    "2026-09-28",
+    "2026-09-29",
+    "2026-09-30",
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-03",
+    "2026-10-04",
+    "2026-10-05",
+    "2026-10-06",
+    "2026-10-07",
+    "2026-10-08",
+    "2026-10-09",
+    "2026-10-10",
+    "2026-10-11",
+    "2026-10-12",
+    "2026-10-13",
+    "2026-10-14",
+    "2026-10-15",
+    "2026-10-16",
+    "2026-10-17",
+    "2026-10-18",
+    "2026-10-19",
+    "2026-10-20",
+    "2026-10-21",
+    "2026-10-22",
+    "2026-10-23"
+  ],
+  "products_by_category": {
+    "books": 834,
+    "electronics": 834,
+    "garden": 833,
+    "kitchen": 833,
+    "office": 833,
+    "toys": 833
+  },
+  "inventory_cents_by_category": {
+    "books": 1031043084,
+    "electronics": 1038903990,
+    "garden": 1038535158,
+    "kitchen": 1034061586,
+    "office": 1026611758,
+    "toys": 1029096924
+  },
+  "revenue_cents_by_category": {
+    "books": 244536649,
+    "electronics": 239694108,
+    "garden": 244197837,
+    "kitchen": 242944090,
+    "office": 243574680,
+    "toys": 243104992
+  },
+  "revenue_cents_by_supplier": {
+    "acme": 289626408,
+    "globex": 294784347,
+    "initech": 292252295,
+    "northwind": 289343644,
+    "umbrella": 292045662
+  },
+  "inventory_cents_by_supplier": {
+    "acme": 1234359500,
+    "globex": 1268139500,
+    "initech": 1243517500,
+    "northwind": 1194252500,
+    "umbrella": 1257983500
+  },
+  "inventory_cents_total": 6198252500,
+  "revenue_cents_total": 1458052356,
+  "top_inventory_category": "electronics",
+  "top_inventory_cents": 1038903990,
+  "top_revenue_category": "books",
+  "top_revenue_cents": 244536649,
+  "products_file": "data/landing/products",
+  "sales_partitions": 30,
+  "druid_files": [
+    "data/druid-ingest/sales.json",
+    "data/druid-ingest/products.json"
+  ]
+}

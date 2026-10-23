@@ -1,0 +1,70 @@
+{
+  "target": "synapse",
+  "dialect": "tsql",
+  "status": "compiled, executed on an equivalent engine (duckdb)",
+  "models": {
+    "revenue_by_category": {
+      "transpile": {
+        "ok": true,
+        "statements": 1,
+        "sample": "SELECT category, SUM(amount_cents) AS revenue_cents, COUNT_BIG(*) AS events FROM sales GROUP BY category ORDER BY revenue_cents DESC"
+      },
+      "executed": true,
+      "rows": 6,
+      "first_row": [
+        "books",
+        244536649,
+        10028
+      ]
+    },
+    "inventory_by_supplier": {
+      "transpile": {
+        "ok": true,
+        "statements": 1,
+        "sample": "SELECT supplier, SUM(price_cents * stock_count) AS inventory_cents, COUNT_BIG(*) AS products FROM products GROUP BY supplier ORDER BY inventory_cents DESC"
+      },
+      "executed": true,
+      "rows": 5,
+      "first_row": [
+        "globex",
+        1268139500,
+        1000
+      ]
+    },
+    "top_categories": {
+      "transpile": {
+        "ok": true,
+        "statements": 1,
+        "sample": "SELECT category, revenue_cents FROM (SELECT category AS category, SUM(amount_cents) AS revenue_cents, ROW_NUMBER() OVER (ORDER BY SUM(amount_cents) DESC) AS rn FROM sales GROUP BY category) AS ranked WHERE rn <= 3 ORDER "
+      },
+      "executed": true,
+      "rows": 3,
+      "first_row": [
+        "books",
+        244536649
+      ]
+    }
+  },
+  "revenue_by_category": {
+    "books": 244536649,
+    "garden": 244197837,
+    "office": 243574680,
+    "toys": 243104992,
+    "kitchen": 242944090,
+    "electronics": 239694108
+  },
+  "inventory_by_supplier": {
+    "globex": 1268139500,
+    "umbrella": 1257983500,
+    "initech": 1243517500,
+    "acme": 1234359500,
+    "northwind": 1194252500
+  },
+  "checks": {
+    "every_model_transpiles": true,
+    "every_model_executes": true,
+    "revenue_matches_generator": true,
+    "inventory_matches_generator": true
+  },
+  "result": "PASS"
+}

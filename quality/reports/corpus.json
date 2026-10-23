@@ -1,0 +1,13 @@
+{
+  "docs": 120,
+  "questions": 240,
+  "unanswerable": 5,
+  "calibration": {
+    "answerable": 80,
+    "unanswerable": 10
+  },
+  "families": {
+    "lexical": 120,
+    "paraphrase": 120
+  }
+}

@@ -1,0 +1,35 @@
+# FEDERATION — dependencies. Python 3.11.
+#
+# Every dependency here is installed and exercised. Where a component could not be installed,
+# the module says so and the report marks it `compiled, not executed` — it is never implied.
+
+# --- data / warehouse ---
+duckdb==1.4.1
+pyarrow==21.0.0
+pandas==2.3.3
+numpy==1.26.4
+scipy==1.17.1
+
+# --- federation ---
+sqlglot==30.24.0          # Presto / T-SQL (Synapse) dialect checks
+pyiceberg==0.9.1          # Iceberg catalog used as the shared table source
+sqlalchemy>=2.0           # pyiceberg SqlCatalog backend
+psycopg2-binary==2.9.13   # the driver behind pyiceberg's JDBC catalog (Postgres)
+requests==2.32.5          # Trino / Druid / Azurite over HTTP
+
+# --- azure ---
+azure-storage-blob==12.28.0   # talks to Azurite over the real Blob wire protocol
+azure-core==1.38.0
+
+# --- llm data layer ---
+scikit-learn==1.9.1       # TF-IDF + SVD embedding, kappa-free statistics, preference ranking
+faiss-cpu==1.15.1         # vector index (exact + IVF)
+
+# --- service / tooling ---
+fastapi==0.119.0
+pydantic==2.12.4
+pyyaml==6.0.3
+python-dotenv==1.1.1
+httpx==0.28.1
+pytest==8.4.2
+ruff==0.14.2

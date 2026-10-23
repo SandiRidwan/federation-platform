@@ -1,0 +1,91 @@
+{
+  "corpus_docs": 120,
+  "chunks": 120,
+  "chunk_strategy": "recursive",
+  "refusal_rule": "per method: refuse when the top-1 score is below a threshold calibrated on held-out questions (halfway between the worst answerable and the best unanswerable score)",
+  "calibration": {
+    "bm25": {
+      "threshold": 2.967236,
+      "calibration_answerable": 80,
+      "calibration_unanswerable": 10,
+      "worst_answerable_top_score": 4.827717,
+      "best_unanswerable_top_score": 1.106756,
+      "separable": true
+    },
+    "vector": {
+      "threshold": 0.557261,
+      "calibration_answerable": 80,
+      "calibration_unanswerable": 10,
+      "worst_answerable_top_score": 0.58629,
+      "best_unanswerable_top_score": 0.528233,
+      "separable": true
+    }
+  },
+  "methods": {
+    "bm25": {
+      "answered": 160,
+      "answerable": 240,
+      "accuracy": 0.6667,
+      "by_family": {
+        "lexical": {
+          "correct": 120,
+          "of": 120,
+          "accuracy": 1.0
+        },
+        "paraphrase": {
+          "correct": 40,
+          "of": 120,
+          "accuracy": 0.3333
+        }
+      },
+      "refused": 5,
+      "unanswerable": 5,
+      "refusal_accuracy": 1.0,
+      "refusal_threshold": 2.967236,
+      "unanswerable_top_scores": [
+        0.018604,
+        0.006912,
+        0.014451,
+        0.006912,
+        0.020378
+      ]
+    },
+    "vector": {
+      "answered": 160,
+      "answerable": 240,
+      "accuracy": 0.6667,
+      "by_family": {
+        "lexical": {
+          "correct": 120,
+          "of": 120,
+          "accuracy": 1.0
+        },
+        "paraphrase": {
+          "correct": 40,
+          "of": 120,
+          "accuracy": 0.3333
+        }
+      },
+      "refused": 5,
+      "unanswerable": 5,
+      "refusal_accuracy": 1.0,
+      "refusal_threshold": 0.557261,
+      "unanswerable_top_scores": [
+        0.47339,
+        0.47339,
+        0.47339,
+        0.47339,
+        0.47339
+      ]
+    }
+  },
+  "checks": {
+    "bm25_answers_some": true,
+    "vector_answers_some": true,
+    "both_refuse_unanswerable": true,
+    "refusal_threshold_is_documented": true,
+    "calibration_set_is_disjoint_from_eval_set": true
+  },
+  "result": "PASS",
+  "note": "Answerable accuracy is measured at k=1 against the fact the question asks for. Thresholds are calibrated on calibration questions that are never scored, and the calibration numbers are reported next to the eval numbers so both can be checked."
+}

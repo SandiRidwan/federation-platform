@@ -1,0 +1,20 @@
+{
+  "sales": {
+    "datasource": "sales",
+    "task_id": "index_parallel_sales_baahjmdb_2026-10-23T13:18:50.453Z",
+    "task_state": "SUCCESS",
+    "rows_ingested": null,
+    "duration_ms": 23930,
+    "wall_seconds": 24.49,
+    "rows_queryable": 60000
+  },
+  "products": {
+    "datasource": "products",
+    "task_id": "index_parallel_products_ckehajii_2026-10-23T13:19:14.960Z",
+    "task_state": "SUCCESS",
+    "rows_ingested": null,
+    "duration_ms": 27662,
+    "wall_seconds": 30.71,
+    "rows_queryable": 5000
+  }
+}

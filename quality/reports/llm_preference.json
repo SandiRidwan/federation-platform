@@ -1,0 +1,23 @@
+{
+  "pairs_total": 40,
+  "pairs_train": 28,
+  "pairs_test": 12,
+  "features": [
+    "contains_fact",
+    "fact_coverage",
+    "question_overlap",
+    "length_saturated"
+  ],
+  "model": "logistic regression on pairwise feature differences",
+  "pairwise_accuracy": 1.0,
+  "mean_margin": 2.8993,
+  "ndcg_at_4": 1.0,
+  "checks": {
+    "ranker_prefers_chosen_on_held_out": true,
+    "every_eval_margin_is_positive": true,
+    "ndcg_above_half": true,
+    "not_claiming_rlhf": true
+  },
+  "result": "PASS",
+  "not_rlhf": "There is no policy, no rollout loop and no reward-model-in-the-loop training. This is a preference ranker trained on offline pairs, which is the part that can be demonstrated honestly at this size."
+}

@@ -1,0 +1,33 @@
+trigger:
+  - main
+
+pr:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  PYTHON_VERSION: "3.11"
+
+stages:
+  - stage: quality
+    displayName: lint, test, verify
+    jobs:
+      - job: checks
+        steps:
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: $(PYTHON_VERSION)
+          - script: pip install -r requirements.txt
+            displayName: install
+          - script: ruff check .
+            displayName: lint
+          - script: pytest -q
+            displayName: unit tests
+          - script: python -m federation.parity --runs 3
+            displayName: federation parity
+          - script: python -m azure_layer.synapse.transpile
+            displayName: synapse transpile
+          - script: python -m azure_layer.tabular.model
+            displayName: dax to sql

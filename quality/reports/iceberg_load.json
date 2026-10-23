@@ -1,0 +1,16 @@
+{
+  "lakehouse.products": {
+    "rows_appended": 5000,
+    "rows_read_back": 5000,
+    "data_files": 1,
+    "snapshots": 1,
+    "partition_spec": "[]"
+  },
+  "lakehouse.sales": {
+    "rows_appended": 60000,
+    "rows_read_back": 60000,
+    "data_files": 30,
+    "snapshots": 1,
+    "partition_spec": "[   1000: dt: identity(4) ]"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "pls_lakehouse_curate",
+  "properties": {
+    "description": "Copy the generated dataset into a curated zone, read it back, filter one category, and repeat the copy per category.",
+    "activities": [
+      {
+        "name": "CopyProductsToCurated",
+        "type": "Copy",
+        "typeProperties": {
+          "source": { "type": "BlobSource", "blobPath": "landing/products/part-00000.parquet" },
+          "sink": { "type": "BlobSink", "blobPath": "curated/products/products.parquet" }
+        }
+      },
+      {
+        "name": "CopySalesManifestToCurated",
+        "type": "Copy",
+        "typeProperties": {
+          "source": { "type": "BlobSource", "blobPath": "landing/sales/dt=2026-10-01/part-00000.parquet" },
+          "sink": { "type": "BlobSink", "blobPath": "curated/sales/one_day.parquet" }
+        }
+      },
+      {
+        "name": "LookupCategories",
+        "type": "Lookup",
+        "typeProperties": { "blobPath": "control/categories.jsonl" }
+      },
+      {
+        "name": "FilterBooks",
+        "type": "Filter",
+        "typeProperties": { "source": "LookupCategories", "field": "category", "equals": "books" }
+      },
+      {
+        "name": "ForEachCategory",
+        "type": "ForEach",
+        "typeProperties": {
+          "items": "LookupCategories",
+          "activities": [
+            {
+              "name": "CopySalesForCategory",
+              "type": "Copy",
+              "typeProperties": {
+                "source": { "type": "BlobSource", "blobPath": "landing/sales/dt=2026-10-02/part-00000.parquet" },
+                "sink": { "type": "BlobSink", "blobPath": "curated/by_category/part.parquet" }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+

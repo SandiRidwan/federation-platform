@@ -1,0 +1,44 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- generated data ---
+# Every byte under data/ is written by `python -m ingestion.generate` (or by a container).
+# Committing it would make the repository 29 MB of output that a single command recreates, and
+# would let a stale file from an earlier layout sit next to the current one — which is exactly how
+# the Druid double-count happened.
+data/
+!data/.gitkeep
+
+# --- runtime state from the compose stack ---
+*.log
+
+# --- secrets ---
+.env
+*.pem
+*.key
+credentials.json
+service-account*.json
+# Azurite's key is published in Microsoft's docs and only works against the emulator; it lives in
+# tools/common/config.py on purpose, not here.
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# --- reports are NOT ignored ---
+# quality/reports/*.json is the evidence this repository exists to produce: every verdict is a file
+# written by the run that produced it. They are small (<100 KB total) and are committed on purpose.

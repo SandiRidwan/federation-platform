@@ -1,0 +1,278 @@
+{
+  "corpus_docs": 120,
+  "questions": 240,
+  "families": {
+    "lexical": 120,
+    "paraphrase": 120
+  },
+  "k": 5,
+  "embedding": "TF-IDF + TruncatedSVD (LSA), fitted on the corpus; not a neural model",
+  "fusion": "reciprocal rank fusion, k=60",
+  "chunking": {
+    "fixed": {
+      "chunks": 240,
+      "tokens": 6280
+    },
+    "recursive": {
+      "chunks": 120,
+      "tokens": 6280
+    },
+    "semantic": {
+      "chunks": 480,
+      "tokens": 6280
+    }
+  },
+  "results": {
+    "fixed": {
+      "build_ms": 360.3,
+      "methods": {
+        "bm25": {
+          "recall_at_1": 0.625,
+          "recall_at_5": 1.0,
+          "mrr": 0.7604,
+          "by_family": {
+            "lexical": {
+              "at1": 120,
+              "at5": 120,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 30,
+              "at5": 120,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 0.853
+        },
+        "vector": {
+          "recall_at_1": 0.5,
+          "recall_at_5": 0.5,
+          "mrr": 0.5,
+          "by_family": {
+            "lexical": {
+              "at1": 120,
+              "at5": 120,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 0,
+              "at5": 0,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 4.122
+        },
+        "vector_ivf": {
+          "recall_at_1": 0.5,
+          "recall_at_5": 0.5,
+          "mrr": 0.5,
+          "by_family": {
+            "lexical": {
+              "at1": 120,
+              "at5": 120,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 0,
+              "at5": 0,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 4.116
+        },
+        "hybrid": {
+          "recall_at_1": 0.625,
+          "recall_at_5": 0.875,
+          "mrr": 0.6917,
+          "by_family": {
+            "lexical": {
+              "at1": 120,
+              "at5": 120,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 30,
+              "at5": 90,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 5.744
+        }
+      }
+    },
+    "recursive": {
+      "build_ms": 327.5,
+      "methods": {
+        "bm25": {
+          "recall_at_1": 0.625,
+          "recall_at_5": 1.0,
+          "mrr": 0.7604,
+          "by_family": {
+            "lexical": {
+              "at1": 120,
+              "at5": 120,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 30,
+              "at5": 120,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 0.603
+        },
+        "vector": {
+          "recall_at_1": 0.625,
+          "recall_at_5": 1.0,
+          "mrr": 0.7604,
+          "by_family": {
+            "lexical": {
+              "at1": 120,
+              "at5": 120,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 30,
+              "at5": 120,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 2.29
+        },
+        "vector_ivf": {
+          "recall_at_1": 0.625,
+          "recall_at_5": 1.0,
+          "mrr": 0.7604,
+          "by_family": {
+            "lexical": {
+              "at1": 120,
+              "at5": 120,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 30,
+              "at5": 120,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 2.563
+        },
+        "hybrid": {
+          "recall_at_1": 0.625,
+          "recall_at_5": 1.0,
+          "mrr": 0.7604,
+          "by_family": {
+            "lexical": {
+              "at1": 120,
+              "at5": 120,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 30,
+              "at5": 120,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 3.238
+        }
+      }
+    },
+    "semantic": {
+      "build_ms": 1475.1,
+      "methods": {
+        "bm25": {
+          "recall_at_1": 0.0,
+          "recall_at_5": 0.5,
+          "mrr": 0.25,
+          "by_family": {
+            "lexical": {
+              "at1": 0,
+              "at5": 120,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 0,
+              "at5": 0,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 1.77
+        },
+        "vector": {
+          "recall_at_1": 0.0,
+          "recall_at_5": 0.5,
+          "mrr": 0.2437,
+          "by_family": {
+            "lexical": {
+              "at1": 0,
+              "at5": 120,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 0,
+              "at5": 0,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 3.781
+        },
+        "vector_ivf": {
+          "recall_at_1": 0.0042,
+          "recall_at_5": 0.0292,
+          "mrr": 0.0124,
+          "by_family": {
+            "lexical": {
+              "at1": 1,
+              "at5": 7,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 0,
+              "at5": 0,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 4.533
+        },
+        "hybrid": {
+          "recall_at_1": 0.0,
+          "recall_at_5": 0.5,
+          "mrr": 0.25,
+          "by_family": {
+            "lexical": {
+              "at1": 0,
+              "at5": 120,
+              "of": 120
+            },
+            "paraphrase": {
+              "at1": 0,
+              "at5": 0,
+              "of": 120
+            }
+          },
+          "p50_ms_per_query": 5.768
+        }
+      }
+    }
+  },
+  "best": {
+    "strategy": "fixed",
+    "method": "bm25",
+    "recall_at_5": 1.0
+  },
+  "fusion_expectation_held": false,
+  "fusion_gap_vs_best_single": {
+    "fixed": -0.125,
+    "recursive": 0.0,
+    "semantic": 0.0
+  },
+  "checks": {
+    "every_method_scored": true,
+    "semantic_chunking_costs_more_tokens_than_fixed": true,
+    "fusion_result_is_recorded": true,
+    "best_recall_at_5_is_above_chance": true,
+    "every_strategy_beats_chance_somewhere": true
+  },
+  "result": "PASS",
+  "note": "Recall is judged against the generator's ground truth: the chunk must come from the document that states the fact AND contain the fact. A hit on the right document with the wrong chunk does not count."
+}

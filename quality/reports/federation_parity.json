@@ -1,0 +1,303 @@
+{
+  "ran_at": "2026-10-23T13:19:46.604663+00:00",
+  "engines": [
+    "trino",
+    "druid",
+    "presto_dialect"
+  ],
+  "runs_per_query": 3,
+  "cases": [
+    {
+      "id": "row_count_sales",
+      "question": "how many sales events are there",
+      "sql": {
+        "trino": "SELECT count(*) AS n FROM iceberg.lakehouse.sales",
+        "druid": "SELECT COUNT(*) AS \"n\" FROM \"sales\"",
+        "presto": "SELECT count(*) AS n FROM iceberg.lakehouse.sales"
+      },
+      "expected": 60000,
+      "values": {
+        "trino": 60000,
+        "presto_dialect": 60000,
+        "druid": 60000
+      },
+      "matches_expected": {
+        "trino": true,
+        "presto_dialect": true,
+        "druid": true
+      },
+      "timings": {
+        "trino": {
+          "p50_ms": 208.65,
+          "cold_ms": 391.39
+        },
+        "presto_dialect": {
+          "transpile_ok": true,
+          "status": "compiled, executed on trino"
+        },
+        "druid": {
+          "p50_ms": 88.43,
+          "cold_ms": 114.65
+        }
+      },
+      "errors": {},
+      "all_agree": true
+    },
+    {
+      "id": "row_count_products",
+      "question": "how many products are there",
+      "sql": {
+        "trino": "SELECT count(*) AS n FROM iceberg.lakehouse.products",
+        "druid": null,
+        "presto": "SELECT count(*) AS n FROM iceberg.lakehouse.products"
+      },
+      "expected": 5000,
+      "values": {
+        "trino": 5000,
+        "presto_dialect": 5000
+      },
+      "matches_expected": {
+        "trino": true,
+        "presto_dialect": true
+      },
+      "timings": {
+        "trino": {
+          "p50_ms": 280.81,
+          "cold_ms": 363.3
+        },
+        "presto_dialect": {
+          "transpile_ok": true,
+          "status": "compiled, executed on trino"
+        }
+      },
+      "errors": {},
+      "all_agree": true
+    },
+    {
+      "id": "revenue_by_category",
+      "question": "total revenue per category, ordered",
+      "sql": {
+        "trino": "SELECT category, sum(amount_cents) AS revenue FROM iceberg.lakehouse.sales GROUP BY category ORDER BY revenue DESC",
+        "druid": "SELECT \"category\", SUM(\"amount_cents\") AS \"revenue\" FROM \"sales\" GROUP BY \"category\" ORDER BY \"revenue\" DESC",
+        "presto": "SELECT category, sum(amount_cents) AS revenue FROM iceberg.lakehouse.sales GROUP BY category ORDER BY revenue DESC"
+      },
+      "expected": {
+        "books": 244536649,
+        "electronics": 239694108,
+        "garden": 244197837,
+        "kitchen": 242944090,
+        "office": 243574680,
+        "toys": 243104992
+      },
+      "values": {
+        "trino": {
+          "books": 244536649,
+          "garden": 244197837,
+          "office": 243574680,
+          "toys": 243104992,
+          "kitchen": 242944090,
+          "electronics": 239694108
+        },
+        "presto_dialect": {
+          "books": 244536649,
+          "garden": 244197837,
+          "office": 243574680,
+          "toys": 243104992,
+          "kitchen": 242944090,
+          "electronics": 239694108
+        },
+        "druid": {
+          "books": 244536649,
+          "garden": 244197837,
+          "office": 243574680,
+          "toys": 243104992,
+          "kitchen": 242944090,
+          "electronics": 239694108
+        }
+      },
+      "matches_expected": {
+        "trino": true,
+        "presto_dialect": true,
+        "druid": true
+      },
+      "timings": {
+        "trino": {
+          "p50_ms": 366.99,
+          "cold_ms": 1332.86
+        },
+        "presto_dialect": {
+          "transpile_ok": true,
+          "status": "compiled, executed on trino"
+        },
+        "druid": {
+          "p50_ms": 119.0,
+          "cold_ms": 183.07
+        }
+      },
+      "errors": {},
+      "all_agree": true
+    },
+    {
+      "id": "inventory_by_category",
+      "question": "inventory value per category (products table only)",
+      "sql": {
+        "trino": "SELECT category, sum(price_cents * stock_count) AS inventory FROM iceberg.lakehouse.products GROUP BY category ORDER BY inventory DESC",
+        "druid": "SELECT \"category\", SUM(\"price_cents\" * \"stock_count\") AS \"inventory\" FROM \"products\" GROUP BY \"category\" ORDER BY \"inventory\" DESC",
+        "presto": "SELECT category, sum(price_cents * stock_count) AS inventory FROM iceberg.lakehouse.products GROUP BY category ORDER BY inventory DESC"
+      },
+      "expected": {
+        "books": 1031043084,
+        "electronics": 1038903990,
+        "garden": 1038535158,
+        "kitchen": 1034061586,
+        "office": 1026611758,
+        "toys": 1029096924
+      },
+      "values": {
+        "trino": {
+          "electronics": 1038903990,
+          "garden": 1038535158,
+          "kitchen": 1034061586,
+          "books": 1031043084,
+          "toys": 1029096924,
+          "office": 1026611758
+        },
+        "presto_dialect": {
+          "electronics": 1038903990,
+          "garden": 1038535158,
+          "kitchen": 1034061586,
+          "books": 1031043084,
+          "toys": 1029096924,
+          "office": 1026611758
+        },
+        "druid": {
+          "electronics": 1038903990,
+          "garden": 1038535158,
+          "kitchen": 1034061586,
+          "books": 1031043084,
+          "toys": 1029096924,
+          "office": 1026611758
+        }
+      },
+      "matches_expected": {
+        "trino": true,
+        "presto_dialect": true,
+        "druid": true
+      },
+      "timings": {
+        "trino": {
+          "p50_ms": 248.18,
+          "cold_ms": 265.64
+        },
+        "presto_dialect": {
+          "transpile_ok": true,
+          "status": "compiled, executed on trino"
+        },
+        "druid": {
+          "p50_ms": 106.26,
+          "cold_ms": 119.96
+        }
+      },
+      "errors": {},
+      "all_agree": true
+    },
+    {
+      "id": "join_sales_products",
+      "question": "revenue per supplier (sales joined to products)",
+      "sql": {
+        "trino": "SELECT p.supplier, sum(s.amount_cents) AS revenue FROM iceberg.lakehouse.sales AS s JOIN iceberg.lakehouse.products AS p ON s.product_id = p.product_id GROUP BY p.supplier ORDER BY revenue DESC",
+        "druid": "SELECT p.\"supplier\", SUM(s.\"amount_cents\") AS \"revenue\" FROM \"sales\" AS s JOIN \"products\" AS p ON s.\"product_id\" = p.\"product_id\" GROUP BY p.\"supplier\" ORDER BY \"revenue\" DESC",
+        "presto": "SELECT p.supplier, sum(s.amount_cents) AS revenue FROM iceberg.lakehouse.sales AS s JOIN iceberg.lakehouse.products AS p ON s.product_id = p.product_id GROUP BY p.supplier ORDER BY revenue DESC"
+      },
+      "expected": {
+        "acme": 289626408,
+        "globex": 294784347,
+        "initech": 292252295,
+        "northwind": 289343644,
+        "umbrella": 292045662
+      },
+      "values": {
+        "trino": {
+          "globex": 294784347,
+          "initech": 292252295,
+          "umbrella": 292045662,
+          "acme": 289626408,
+          "northwind": 289343644
+        },
+        "presto_dialect": {
+          "globex": 294784347,
+          "initech": 292252295,
+          "umbrella": 292045662,
+          "acme": 289626408,
+          "northwind": 289343644
+        },
+        "druid": {
+          "globex": 294784347,
+          "initech": 292252295,
+          "umbrella": 292045662,
+          "acme": 289626408,
+          "northwind": 289343644
+        }
+      },
+      "matches_expected": {
+        "trino": true,
+        "presto_dialect": true,
+        "druid": true
+      },
+      "timings": {
+        "trino": {
+          "p50_ms": 510.18,
+          "cold_ms": 493.49
+        },
+        "presto_dialect": {
+          "transpile_ok": true,
+          "status": "compiled, executed on trino"
+        },
+        "druid": {
+          "p50_ms": 306.14,
+          "cold_ms": 501.27
+        }
+      },
+      "errors": {},
+      "all_agree": true
+    }
+  ],
+  "speedups": {
+    "row_count_sales": {
+      "trino_p50_ms": 208.65,
+      "druid_p50_ms": 88.43,
+      "trino_over_druid": 2.36,
+      "druid_wins": true
+    },
+    "revenue_by_category": {
+      "trino_p50_ms": 366.99,
+      "druid_p50_ms": 119.0,
+      "trino_over_druid": 3.08,
+      "druid_wins": true
+    },
+    "inventory_by_category": {
+      "trino_p50_ms": 248.18,
+      "druid_p50_ms": 106.26,
+      "trino_over_druid": 2.34,
+      "druid_wins": true
+    },
+    "join_sales_products": {
+      "trino_p50_ms": 510.18,
+      "druid_p50_ms": 306.14,
+      "trino_over_druid": 1.67,
+      "druid_wins": true
+    }
+  },
+  "checks": {
+    "every_case_matches_the_generator": true,
+    "every_case_has_at_least_two_engines": true,
+    "no_engine_errors": true
+  },
+  "result": "PASS",
+  "notes": [
+    "Presto is a dialect here, executed on Trino. The report says 'compiled, executed on trino', never 'Presto ran'.",
+    "Expected values come from the generator, not from any engine being compared.",
+    "Druid ingestion has rollup disabled, because rollup's default collapses rows and made COUNT(*) a different number from the other engines.",
+    "At 60,000 rows Druid was faster on every case, including the join. That is fixed overhead on Trino's side (query planning + Iceberg metadata), not evidence that Druid is universally faster; the join case was included expecting the opposite result."
+  ]
+}

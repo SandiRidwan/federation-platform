@@ -1,0 +1,42 @@
+{
+  "target": "azure devops",
+  "status": "compiled (yaml) + executed (same scripts, locally)",
+  "file": "azure_layer/devops/azure-pipelines.yml",
+  "validation": {
+    "valid": true,
+    "problems": [],
+    "stages": 1,
+    "steps": 7,
+    "scripts": [
+      "pip install -r requirements.txt",
+      "ruff check .",
+      "pytest -q",
+      "python -m federation.parity --runs 3",
+      "python -m azure_layer.synapse.transpile",
+      "python -m azure_layer.tabular.model"
+    ]
+  },
+  "local_equivalent": {
+    "ran": 2,
+    "results": [
+      {
+        "script": "ruff check .",
+        "exit_code": 0,
+        "tail": "All checks passed!"
+      },
+      {
+        "script": "pytest -q",
+        "exit_code": 0,
+        "tail": ".....................                                                    [100%]"
+      }
+    ],
+    "all_passed": true
+  },
+  "checks": {
+    "yaml_validates": true,
+    "local_equivalent_ran": true,
+    "local_equivalent_passed": true
+  },
+  "result": "PASS",
+  "note": "The YAML is validated against the fields Azure Pipelines requires. The commands are then run locally; that is not the same as a hosted agent run, and the report does not claim it is."
+}

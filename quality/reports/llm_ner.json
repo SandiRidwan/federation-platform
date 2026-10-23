@@ -1,0 +1,46 @@
+{
+  "method": "rule-based (regex + gazetteer); no spacy model",
+  "documents": 120,
+  "ground_truth_source": "data/corpus/entities.json (written by the generator)",
+  "per_label": {
+    "sku": {
+      "true_positive": 120,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "warehouse": {
+      "true_positive": 120,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "supplier": {
+      "true_positive": 120,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "category": {
+      "true_positive": 120,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "checks": {
+    "every_label_extracted": true,
+    "precision_is_one": true,
+    "recall_is_one": true
+  },
+  "result": "PASS",
+  "note": "Entities are known by construction, so precision and recall are exact. A neural tagger would be judged on a real corpus and is not used: it is not installed, and a model download would make this offline-only repository require the network."
+}
